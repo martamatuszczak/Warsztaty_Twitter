@@ -8,3 +8,10 @@ CREATE TABLE User (
     PRIMARY KEY(id)
 );
 
+CREATE TABLE Tweet (
+    id INT AUTO_INCREMENT NOT NULL,
+    user_id INT NOT NULL,
+    text VARCHAR(140) NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN KEY(user_id) REFERENCES User(id) ON DELETE CASCADE
+);
