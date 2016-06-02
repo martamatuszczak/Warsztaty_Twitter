@@ -14,6 +14,19 @@ class User {
         }
     }
     
+    public static function getUserById(mysqli $conn, $id) {
+        $sql="SELECT * FROM User WHERE id = '$id'";
+        
+        $result = $conn->query($sql);
+        if($result->num_rows == 1) {
+            $row = $result->fetch_assoc();
+            return $row;
+        }
+        else {
+            return false;
+        }
+    }
+    
     public static function login(mysqli $conn, $email, $password) {
         $sql = "SELECT * FROM User WHERE email = '$email'";
         $result = $conn->query($sql);
@@ -29,6 +42,52 @@ class User {
         else {
             return false;
         }
+    }
+    
+    public static function loadAllTweets(mysqli $conn, $userId) {
+        $sql = "SELECT * FROM Tweet WHERE user_id = $userId";
+        $result = $conn->query($sql);
+        if($result->num_rows > 0) {
+            $tweetsArray = [];
+            while($row = $result->fetch_assoc()) {
+                $tweetsArray[]= [$row['id'], $row['text']];             
+            }
+            
+            return $tweetsArray;
+        }
+        
+    }
+    
+    public static function loadAllMessagesSent(mysqli $conn, $userId) {
+        $sql = "SELECT Message.id, Message.receiver_id, User.fullName, Message.title, Message.text 
+                FROM Message JOIN User ON Message.receiver_id = User.id
+                WHERE author_id = $userId";
+        $result = $conn->query($sql);
+        if($result->num_rows > 0) {
+            $sentMessagesArray = [];
+            while($row = $result->fetch_assoc()) {
+                $sentMessagesArray[]= [$row['id'], $row['receiver_id'], $row['fullName'], $row['title'], $row['text']];             
+            }
+            
+            return $sentMessagesArray;
+        }
+        
+    }
+    
+    public static function loadAllMessagesReceived(mysqli $conn, $userId) {
+        $sql = "SELECT Message.id, Message.author_id, User.fullName, Message.title, Message.text 
+                FROM Message JOIN User ON Message.author_id = User.id
+                WHERE receiver_id = $userId";
+        $result = $conn->query($sql);
+        if($result->num_rows > 0) {
+            $receivedMessagesArray = [];
+            while($row = $result->fetch_assoc()) {
+                $receivedMessagesArray[]= [$row['id'], $row['author_id'], $row['fullName'], $row['title'], $row['text']];             
+            }
+            
+            return $receivedMessagesArray;
+        }
+        
     }
 
     private $id;
@@ -99,6 +158,7 @@ class User {
         else {
             $sql = "UPDATE User SET 
                     email = '{$this->email}', 
+                    password = '{$this->password}',
                     fullName = '{$this->fullName}', 
                     active = '{$this->active}'
                     WHERE id = {$this->id}";
@@ -130,7 +190,5 @@ class User {
     }
     
     
-    public function loadAllTweets() {
-        
-    }
+    
 }

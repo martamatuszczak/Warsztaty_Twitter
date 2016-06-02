@@ -2,6 +2,35 @@
 
 class Tweet {
     
+    
+    static function show(mysqli $conn, $id) {
+        $sql = "SELECT * FROM Tweet WHERE id = '$id'";
+        
+        $result = $conn->query($sql);
+        if($result->num_rows == 1) {
+            $row = $result->fetch_assoc();
+            return $row; 
+        }
+        else{
+            return false;
+        }
+    }
+    
+    public static function loadAllComments(mysqli $conn, $tweetId) {
+        $sql = "SELECT Comment.text, Comment.creation_date, User.fullName FROM Comment JOIN User ON Comment.user_id = User.id
+                WHERE tweet_id = $tweetId ORDER BY Comment.creation_date";
+        $result = $conn->query($sql);
+        if($result->num_rows > 0) {
+            $commentsArray = [];
+            while($row = $result->fetch_assoc()) {
+                $commentsArray[]= [$row['fullName'], $row['text'], $row['creation_date']];             
+            }
+            
+            return $commentsArray;
+        }
+        
+    }
+    
     private $id;
     private $userId;
     private $text;
@@ -18,7 +47,7 @@ class Tweet {
     }
     
     function setUserID($userId) {
-        $this->userId = is_int($userId) ?$userId :null;
+        $this->userId = is_numeric($userId) ?$userId :$this->userId;
     }
     
     function getUserID() {
@@ -26,7 +55,7 @@ class Tweet {
     }
     
     function setText($text) {
-        $this->text = is_string($text) ?$text :null;
+        $this->text = is_string($text) ?$text :$this->text;
     }
     
     function getText() {
@@ -42,16 +71,16 @@ class Tweet {
             $this->id = $rowTweet['id'];
             $this->userId = $rowTweet['user_id'];
             $this->text = $rowTweet['text'];
-           
+            
         }
         else {
             return null;
         }
     }
     
-    function create(mysqli $conn) {
-        
-        $sql = "INSERT INTO Tweets (user_id, text) VALUES ('{$this->userId}', '{$this->text}'";
+    function saveTweetToDB(mysqli $conn) {
+
+        $sql = "INSERT INTO Tweet (user_id, text) VALUES ('{$this->userId}', '{$this->text}')";
 
         if($conn->query($sql)) {
             $this->id = $conn->insert_id;
@@ -64,7 +93,7 @@ class Tweet {
     
     function update(mysqli $conn) {
         
-        $sql = "UPDATE Tweets SET user_id = '{$this->userId}' text = '{$this->text}'";
+        $sql = "UPDATE Tweet SET user_id = '{$this->userId}' text = '{$this->text}')";
         
         if($conn->query($sql)) {
             return TRUE;
@@ -72,10 +101,6 @@ class Tweet {
         else {
             return false;
         }
-    }
-    
-    function show() {
-        
     }
     
     function getAllComments() {

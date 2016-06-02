@@ -26,6 +26,7 @@ if(isset($_SESSION['loggedUserId'])) {
          $newUser->activate();
          if($newUser->saveToDB($conn)) {
              echo("Registration successful<br>");
+             header("Location:index.php");
          }
          else {
              echo("Error during registration <br>");
