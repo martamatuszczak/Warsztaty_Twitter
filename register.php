@@ -54,6 +54,7 @@ if(isset($_SESSION['loggedUserId'])) {
 <html>
     <head>
         <meta charset="UTF-8">
+        <link rel="stylesheet" href="./css/style.css">
         <title></title>
     </head>
     <body>
@@ -61,7 +62,7 @@ if(isset($_SESSION['loggedUserId'])) {
             <fieldset>
                 <label>
                     Email:
-                    <input type="text" name="email">
+                    <input type="email" name="email">
                 </label>
                 <br>
                 <label>

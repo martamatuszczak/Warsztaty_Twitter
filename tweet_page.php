@@ -4,11 +4,16 @@ session_start();
 require_once './src/User.php';
 require_once './src/Tweet.php';
 require_once './src/Comment.php';
-require_once './src/connection.php';       
+require_once './src/connection.php'; 
+
+if(!isset($_SESSION['loggedUserId'])) {
+    header("Location: login.php");    
+}
 ?>
 <html>
     <head>
         <meta charset="UTF-8">
+        <link rel="stylesheet" href="./css/style.css">
         <title></title>
     </head>
     <body>
@@ -19,12 +24,12 @@ require_once './src/connection.php';
             $thisTweet = Tweet::show($conn, $tweetId);
             
             $userInfo = User::getUserById($conn, $thisTweet['user_id']);
-            echo("<h1>Autor: {$userInfo['fullName']}</h1>");
+            echo("<h1>Author: {$userInfo['fullName']}</h1>");
             echo("<h3>Tweet:</h3>");
             echo("<div>{$thisTweet['text']}</div>");
             
-            $tweetComments = Comment::loadAllComments($conn, $tweetId);
-            echo("<h4>Komentarze:</h4>");
+            $tweetComments = Tweet::loadAllComments($conn, $tweetId);
+            echo("<h4>Comments:</h4>");
             echo("<dl>");
             for($i = 0; $i < count($tweetComments); $i++) {         
                     echo("<dt><a href='user_page.php?id={$thisTweet['user_id']}'> {$tweetComments[$i][0]}</a> <br> {$tweetComments[$i][2]}</dt>"); 
@@ -41,7 +46,10 @@ require_once './src/connection.php';
                 $newComment->setCreationDate(date('Y-m-d G:i'));
                 $newComment->setText($_POST['comment']);
                 $newComment->saveCommentToDB($conn);
-                echo("dodany komentarz");
+                echo("Added comment");
+            }
+            else {
+                echo("Cannot add empty comment");
             }
         }
         
@@ -50,12 +58,12 @@ require_once './src/connection.php';
         <form method="POST">
             <textarea maxlength="100" name="comment"></textarea>
             <br>
-            <input type="submit" value="Skomentuj">
+            <input type="submit" value="Comment">
         </form>
         
         <?php
-        echo("<a href='index.php'>Strona główna </a>");
-        echo("<a href='user_page.php?id={$thisTweet['user_id']}'>Strona użytkownika</a>"); 
+        echo("<a href='index.php'>Home </a>");
+        echo("<a href='user_page.php?id={$thisTweet['user_id']}'>User page</a>"); 
         ?>
     </body>
 </html>

@@ -1,0 +1,10 @@
+
+.unread {
+    color: black;
+    font-weight: bold;
+}
+
+.read {
+    color: grey;
+}
+

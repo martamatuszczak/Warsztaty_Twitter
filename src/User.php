@@ -20,7 +20,10 @@ class User {
         $result = $conn->query($sql);
         if($result->num_rows == 1) {
             $row = $result->fetch_assoc();
-            return $row;
+            if($row['active'] == 1) {
+                return $row;
+            }
+            return false;
         }
         else {
             return false;
@@ -75,14 +78,14 @@ class User {
     }
     
     public static function loadAllMessagesReceived(mysqli $conn, $userId) {
-        $sql = "SELECT Message.id, Message.author_id, User.fullName, Message.title, Message.text 
+        $sql = "SELECT Message.id, Message.author_id, User.fullName, Message.title, Message.text, Message.status 
                 FROM Message JOIN User ON Message.author_id = User.id
                 WHERE receiver_id = $userId";
         $result = $conn->query($sql);
         if($result->num_rows > 0) {
             $receivedMessagesArray = [];
             while($row = $result->fetch_assoc()) {
-                $receivedMessagesArray[]= [$row['id'], $row['author_id'], $row['fullName'], $row['title'], $row['text']];             
+                $receivedMessagesArray[]= [$row['id'], $row['author_id'], $row['fullName'], $row['title'], $row['text'], $row['status']];             
             }
             
             return $receivedMessagesArray;
@@ -183,6 +186,7 @@ class User {
             $this->password = $rowUser['password'];
             $this->fullName = $rowUser['fullName'];
             $this->active = $rowUser['active'];
+            return $this;
         }
         else {
             return null;
