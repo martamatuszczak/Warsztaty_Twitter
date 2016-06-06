@@ -36,47 +36,53 @@ if(!isset($_SESSION['loggedUserId'])) {
             </div>
           </nav>
         <div class="container text-center">
-            <h1>Create message</h1>
-            <form method="POST" role="form">
-                <div class="form-group">
-                    <label>
-                        Title:
-                        <input class="form-control" type="text" name="title">
-                    </label>
+            <div class="row">
+                <div class="col-md-10">
+                    <h1>Create message</h1>
+                    <form method="POST" role="form">
+                        <div class="form-group">
+                            <label>
+                                Title:
+                                <input class="form-control" type="text" name="title">
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                Message:
+                                <textarea class="form-control" name="message"></textarea>
+                            </label>
+                        </div>
+                        <input type="submit" class="btn btn-info" value="Send">
+                    </form>
                 </div>
-                <div class="form-group">
-                    <label>
-                        Message:
-                        <textarea class="form-control" name="message"></textarea>
-                    </label>
+                <br><br>
+                <div class="col-md-2">
+                <?php
+                    $authorId = $_SESSION['loggedUserId'];
+                    if(isset($_GET['id'])) {
+                        $receiverId = $_GET['id'];
+                    }
+
+                    if($_SERVER['REQUEST_METHOD'] === "POST") {
+                        if(!empty($_POST['message']) && !empty($_POST['title'])) {
+                            $title = $_POST['title'];
+                            $text = $_POST['message']; 
+                            $newMessage = new Message();
+                            $newMessage->setAuthorId($authorId);
+                            $newMessage->setReceiverId($receiverId);
+                            $newMessage->setTitle($title);
+                            $newMessage->setText($text);
+                            $newMessage->saveMessageToDB($conn);
+                            echo("Message sent");
+                        }
+                        else {
+                            echo("Cannot send empty message");
+                        }
+                    }
+                    echo("<a class='btn btn-info' href='user_page.php?id={$receiverId}'>Return to user page</a>"); 
+                ?>
                 </div>
-                <input type="submit" class="btn btn-info" value="Send">
-            </form>
-            <br><br>
-        <?php
-            $authorId = $_SESSION['loggedUserId'];
-            if(isset($_GET['id'])) {
-                $receiverId = $_GET['id'];
-            }
-        
-            if($_SERVER['REQUEST_METHOD'] === "POST") {
-                if(!empty($_POST['message']) && !empty($_POST['title'])) {
-                    $title = $_POST['title'];
-                    $text = $_POST['message']; 
-                    $newMessage = new Message();
-                    $newMessage->setAuthorId($authorId);
-                    $newMessage->setReceiverId($receiverId);
-                    $newMessage->setTitle($title);
-                    $newMessage->setText($text);
-                    $newMessage->saveMessageToDB($conn);
-                    echo("Message sent");
-                }
-                else {
-                    echo("Cannot send empty message");
-                }
-            }
-            echo("<a class='btn btn-info' href='user_page.php?id={$receiverId}'>Return to user page</a>"); 
-        ?>
+            </div>
        </div>
     </body>
 </html>

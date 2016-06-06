@@ -23,11 +23,11 @@ $userName = $userInfo['fullName'];
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container-fluid">
               <div class="navbar-header">
-                <a class="navbar-brand" href="#">Logo</a>
+                <a class="navbar-brand" href="index.php">Logo</a>
               </div>
               <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
-                  <li class="active"><a href="#">Home</a></li>
+                  <li class="active"><a href="index.php">Home</a></li>
                   <li><a href='all_users.php'>All users</a></li>
                   <li><a href='messages_page.php'>Messages</a></li>
                 </ul>
@@ -80,7 +80,9 @@ $userName = $userInfo['fullName'];
                         <div class="list-group">');
                 
                 for($i = 0; $i < count($allTweets); $i++) {         
-                    echo("<a class='list-group-item' href='tweet_page.php?id={$allTweets[$i][0]}'>{$allTweets[$i][1]}</a>");  
+                    $tweetComments = Tweet::loadAllComments($conn, $allTweets[$i][0]);
+                    $commentsCount = count($tweetComments);
+                    echo("<a class='list-group-item' href='tweet_page.php?id={$allTweets[$i][0]}'>{$allTweets[$i][1]}<span class='badge'>$commentsCount</span></a>");
                 }
                 
                 echo(

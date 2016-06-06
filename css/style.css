@@ -8,3 +8,13 @@
     color: grey;
 }
 
+.tweet_link {
+    color: black;
+}
+.tweet_link:hover {
+    color: #ffe000;
+}
+
+.left {
+    text-align: left;
+}

@@ -48,14 +48,6 @@ a {
   color: #ffe000;
 }
 
-.tweet_link {
-    color: black;
-}
-.tweet_link:hover {
-    color: #ffe000;
-}
-
-
 a:active,
 a:hover {
   outline: 0;
@@ -3299,9 +3291,9 @@ fieldset[disabled] .btn-success.focus {
 .btn-info:active.focus,
 .btn-info.active.focus,
 .open > .dropdown-toggle.btn-info.focus {
-  color: #fff;
-  background-color: #269abc;
-  border-color: #1b6d85;
+  color: black;
+  background-color: #ffe000;
+  border-color: #ffe000;
 }
 .btn-info:active,
 .btn-info.active,
@@ -3317,12 +3309,12 @@ fieldset[disabled] .btn-info:focus,
 .btn-info.disabled.focus,
 .btn-info[disabled].focus,
 fieldset[disabled] .btn-info.focus {
-  background-color: #5bc0de;
-  border-color: #46b8da;
+  background-color: #ffe000;
+  border-color: #ffe000;
 }
 .btn-info .badge {
-  color: #5bc0de;
-  background-color: #fff;
+  color: black;
+  background-color: #ffe000;
 }
 .btn-warning {
   color: #fff;

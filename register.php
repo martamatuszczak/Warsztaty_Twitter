@@ -55,33 +55,46 @@ if(isset($_SESSION['loggedUserId'])) {
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="./css/style.css">
+        <link rel="stylesheet" href="./css/bootstrap.css">
         <title></title>
     </head>
     <body>
-        <form method="POST">
-            <fieldset>
-                <label>
-                    Email:
-                    <input type="email" name="email">
-                </label>
-                <br>
-                <label>
-                    Password:
-                    <input type="password" name="password">
-                </label>
-                <br>
-                <label>
-                    Retype password:
-                    <input type="password" name="retypedPassword">
-                </label>
-                <br>
-                <label>
-                    Full name:
-                    <input type="text" name="fullName">
-                </label>
-                <br>
-                <input type="submit" value="Register">
-            </fieldset>    
-        </form>
+        <div class="container text-center">   
+            <div class="jumbotron">
+                <h1>Log in to continue</h1>
+            </div>
+            <div class="row">  
+                <div class="col-md-12">
+                    <form method="POST">
+                        <div class="form-group">
+                            <label>
+                                Email:
+                                <input class="form-control" type="email" name="email">
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                Password:
+                                <input class="form-control" type="password" name="password">
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                Retype password:
+                                <input class="form-control" type="password" name="retypedPassword">
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                Full name:
+                                <input class="form-control" type="text" name="fullName">
+                            </label>
+                        </div>
+                        <input class="btn btn-info" type="submit" value="Register">
+  
+                    </form>
+                </div>
+            </div>    
+        </div>
     </body>
 </html>
