@@ -5,21 +5,21 @@ require_once 'src/connection.php';
 require_once 'src/User.php';
 
 
-if($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = strlen(trim($_POST['email'])) > 0 ?trim($_POST['email']) :null;
-    $password = strlen(trim($_POST['password'])) > 0 ?trim($_POST['password']) :null;
-    
-    if($email && $password) {
-        if($loggedUserId = User::login($conn, $email, $password)) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = strlen(trim($_POST['email'])) > 0 ? trim($_POST['email']) : null;
+    $password = strlen(trim($_POST['password'])) > 0 ? trim($_POST['password']) : null;
+
+    if ($email && $password) {
+        if ($loggedUserId = User::login($conn, $email, $password)) {
             $_SESSION['loggedUserId'] = $loggedUserId;
             header("Location: index.php");
-        }
-        else {
+        } else {
             echo("Incorrect email or password<br>");
         }
     }
-} 
-
+}
+$conn->close();
+$conn = null;
 ?>
 <html>
     <head>

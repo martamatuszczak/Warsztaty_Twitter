@@ -25,3 +25,8 @@ if(!isset($_SESSION['loggedUserId'])) {
             header("Location: login.php");
             echo("User deleted");
         }
+        $conn->close();
+        $conn = null;
+        ?>
+    </body>
+</html>    
