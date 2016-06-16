@@ -44,41 +44,41 @@ if (!isset($_SESSION['loggedUserId'])) {
                 $thisTweet = new Tweet();
                 $thisTweet->loadFromDB($conn, $tweetId);
                 
-                //Wyświetlanie imienia autora
+                //Showing tweet author name
                 $user = new User();
                 $userId = $thisTweet->getUserID();
                 $user->loadFromDB($conn, $userId);
                 $userName = $user->getFullName();
                 echo("<h3>Author: <a class='tweet_link' href='user_page.php?id=$userId'>$userName</a></h3>");
                 
-                //Wyświetlanie tweeta
+                //Showing tweet
                 echo("<h3>Tweet:</h3>");
                 echo("<div>{$thisTweet->getText()}</div>");
                 
-                //Wyświetlanie komentarzy do tweeta
+                //Showing tweet comments
                 $tweetComments = Comment::loadAllComments($conn, $tweetId);
                 echo("<h4>Comments:</h4>");
                 echo("<dl>");
                 for ($i = 0; $i < count($tweetComments); $i++) {
                     
-                    //Dane komentarza
+                    //Comment data
                     $commentText = $tweetComments[$i]->getText();
                     $commentDate = $tweetComments[$i]->getCreationDate();
                     
-                    //Dane użytkownika, który wysłał komentarz
+                    //Comment author data
                     $commentingUserId = $tweetComments[$i]->getUserId();
                     $commentingUser = new User();
                     $commentingUser->loadFromDB($conn, $commentingUserId);
                     $commentingUserName = $commentingUser->getFullName();
                     
-                    //Generowanie elementów listy komentarzy
+                    //Generating comment list
                     echo("<dt><a class='tweet_link' href='user_page.php?id=$commentingUserId'>$commentingUserName </a>$commentDate</dt>");
                     echo("<dd>$commentText</dd>");
                 }
                 echo("</dl>");
             }
 
-            //Dodawanie komentarza
+            //Adding comment
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (!empty($_POST['comment'])) {
                     $newComment = new Comment();

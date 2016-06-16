@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $user = User::getUserByEmail($conn, $email);
 
+    //Registration
     if ($email && $password && $retypedPassword && $fullName && $password == $retypedPassword && !$user) {
         $newUser = new User();
         $newUser->setEmail($email);
@@ -30,7 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             echo("Error during registration <br>");
         }
-    } else {
+    } 
+    else {
+        
+        //Checking which inputs have been filled incorrectly
         if (!$email) {
             echo("Incorrect email<br>");
         }
@@ -43,6 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$fullName) {
             echo("Incorrect full name<br>");
         }
+        
+        //Checking if user already exists in database
         if ($user) {
             echo("User already exists");
         }

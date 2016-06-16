@@ -44,15 +44,18 @@ if (!isset($_SESSION['loggedUserId'])) {
                     $userMessagesSent = Message::loadAllMessagesSent($conn, $userId);                   
                     echo("<ul class='list-group'>");
                     for ($i = 0; $i < count($userMessagesSent); $i++) {
-                        //Dane wiadomości
+                        
+                        //Sent message data
                         $messageId = $userMessagesSent[$i]->getId();
                         $messageTitle = $userMessagesSent[$i]->getTitle();
-                        //Dane odbiorcy
+                        
+                        //Receiver data
                         $receiverId = $userMessagesSent[$i]->getReceiverId();
                         $receiver = new User();
                         $receiver->loadFromDB($conn, $receiverId);
                         $receiverName = $receiver->getFullName();
-                        //Wyświetlanie listy wiadomości wysłanych
+                        
+                        //Showing messages sent
                         echo("<li class='list-group-item'>Message to:
                                 <a class='tweet_link' href='user_page.php?id=$receiverId'>$receiverName</a>
                                 <br>Title: <a class='tweet_link' href='message_page.php?message_id=$messageId&author_id=$userId&receiver_id=$receiverId'>$messageTitle</a></li>");
@@ -66,15 +69,17 @@ if (!isset($_SESSION['loggedUserId'])) {
                     echo("<ul class='list-group'>");
                     for ($i = 0; $i < count($userMessagesReceived); $i++) {
                         
-                        //Dane wiadomości
+                        //Received message data
                         $messageId = $userMessagesReceived[$i]->getId();
                         $messageTitle = $userMessagesReceived[$i]->getTitle();
-                        //Dane odbiorcy
+                        
+                        //Sender data
                         $authorId = $userMessagesReceived[$i]->getAuthorId();
                         $author = new User();
                         $author->loadFromDB($conn, $authorId);
                         $authorName = $author->getFullName();
                         
+                        //Showing messages received - links styled differently, depending on whether a message has been read
                         if ($userMessagesReceived[$i]->getStatus() == 0) {
                             echo("<li class='list-group-item'>Message from:
                                     <a class = 'tweet_link' href='user_page.php?id=$authorId'>$authorName</a>

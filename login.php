@@ -4,7 +4,7 @@ session_start();
 require_once 'src/connection.php';
 require_once 'src/User.php';
 
-
+//Login
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = strlen(trim($_POST['email'])) > 0 ? trim($_POST['email']) : null;
     $password = strlen(trim($_POST['password'])) > 0 ? trim($_POST['password']) : null;

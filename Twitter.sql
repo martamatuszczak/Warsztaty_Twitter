@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Czas wygenerowania: 09 Cze 2016, 04:50
+-- Czas wygenerowania: 16 Cze 2016, 19:04
 -- Wersja serwera: 5.5.49-0ubuntu0.14.04.1
 -- Wersja PHP: 5.5.9-1ubuntu4.16
 
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `Comment` (
   PRIMARY KEY (`id`),
   KEY `Comment_ibfk_1` (`tweet_id`),
   KEY `Comment_ibfk_2` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=41 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=44 ;
 
 --
 -- Zrzut danych tabeli `Comment`
@@ -62,7 +62,9 @@ INSERT INTO `Comment` (`id`, `tweet_id`, `user_id`, `creation_date`, `text`) VAL
 (37, 28, 20, '2016-06-09 04:38:00', 'Wszelki duch! jakaż potwora!'),
 (38, 4, 19, '2016-06-09 04:39:00', 'To fajnie'),
 (39, 35, 16, '2016-06-09 04:42:00', 'Szarpie mię żarłoczne ptastwo;'),
-(40, 22, 16, '2016-06-09 04:43:00', 'Tak od potępieńca głowy\r\nZ trzaskiem sypią się iskrzyska.');
+(40, 22, 16, '2016-06-09 04:43:00', 'Tak od potępieńca głowy\r\nZ trzaskiem sypią się iskrzyska.'),
+(41, 22, 20, '2016-06-13 20:12:00', 'Ojej'),
+(42, 41, 5, '2016-06-15 22:04:00', 'Żyje??');
 
 -- --------------------------------------------------------
 
@@ -80,7 +82,7 @@ CREATE TABLE IF NOT EXISTS `Message` (
   PRIMARY KEY (`id`),
   KEY `Message_ibfk_1` (`author_id`),
   KEY `Message_ibfk_2` (`receiver_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=19 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=22 ;
 
 --
 -- Zrzut danych tabeli `Message`
@@ -89,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `Message` (
 INSERT INTO `Message` (`id`, `author_id`, `receiver_id`, `title`, `text`, `status`) VALUES
 (7, 5, 7, 'Trudniejsze sprawy', 'Nie mam wąsów', '0'),
 (9, 7, 5, 'fasfdagg', 'dsagdsgdsgggggjsjjlkjadlsgjalksjgslkgjdlksghdsklgjlkdshfjgjytkkfskgjsjj', '1'),
-(10, 15, 5, 'Hej', 'Jestem Wojtek i też mam 12 lat', '0'),
+(10, 15, 5, 'Hej', 'Jestem Wojtek i też mam 12 lat', '1'),
 (11, 5, 15, 'Hej', 'Mam na imię Roman i jestem tokarzem', '1'),
 (12, 18, 14, 'Cześć', 'Chciałbyś pójść ze mną na kolację?', '0'),
 (13, 18, 16, 'Hej', 'Wybrałabyś się ze mną na zakupy?', '0'),
@@ -97,7 +99,9 @@ INSERT INTO `Message` (`id`, `author_id`, `receiver_id`, `title`, `text`, `statu
 (15, 21, 17, 'Miejcie nadzieję', 'Bo nadzieja przejdzie z was do przyszłych pokoleń i ożywi je; ale jeśli w was umrze, to przyszłe pokolenia będą z ludzi martwych.', '0'),
 (16, 21, 18, 'Miejcie nadzieję', 'Bo nadzieja przejdzie z was do przyszłych pokoleń i ożywi je; ale jeśli w was umrze, to przyszłe pokolenia będą z ludzi martwych.', '0'),
 (17, 20, 21, 'Widzicie w oknie upiora?', 'Jak kość na polu wybladły;\r\nPatrzcie! patrzcie, jakie lice!\r\nW gębie dym i błyskawice,\r\nOczy na głowę wysiadły,\r\nŚwiecą jak węgle w popiele.\r\nWłos rozczochrany na czele.\r\nA jak suchy snop cierniowy\r\nPłonąc miotłę ognia ciska,\r\nTak od potępieńca głowy\r\nZ t', '0'),
-(18, 16, 17, 'Do nieba?', 'O nie! ja nie chcę do nieba;', '0');
+(18, 16, 17, 'Do nieba?', 'O nie! ja nie chcę do nieba;', '0'),
+(19, 5, 18, 'Hej', 'To ja, Roman', '1'),
+(20, 5, 7, 'Hej', 'Jestem Roman... A ty?\r\n', '0');
 
 -- --------------------------------------------------------
 
@@ -111,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `Tweet` (
   `text` varchar(140) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=42 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=44 ;
 
 --
 -- Zrzut danych tabeli `Tweet`
@@ -146,7 +150,8 @@ INSERT INTO `Tweet` (`id`, `user_id`, `text`) VALUES
 (38, 17, 'Strzelam banie i na rusztowanie'),
 (39, 17, 'Ja roboty sie nie boję, mogę nawet koło niej leżeć'),
 (40, 17, 'Spaliła mi się "markowa" szlifierka firmy Toya. '),
-(41, 17, 'Panie majster, Mietek spadł z rusztowania!!');
+(41, 17, 'Panie majster, Mietek spadł z rusztowania!!'),
+(42, 5, 'Hej, co tam?\r\n');
 
 -- --------------------------------------------------------
 
@@ -162,23 +167,23 @@ CREATE TABLE IF NOT EXISTS `User` (
   `active` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=22 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23 ;
 
 --
 -- Zrzut danych tabeli `User`
 --
 
 INSERT INTO `User` (`id`, `email`, `password`, `fullName`, `active`) VALUES
-(5, 'roman@wp.pl', '$2y$10$sLApPwQiGZhkit0kC9lYAujFDcrbGcY992XImUPp.WYNfHE4Ai.Zm', 'Roman Flak', 1),
-(7, 'adam.kowalski@wp.pl', '$2y$10$zYeVGRXdMv5JLrPorSNJveVOTvfEfqqGNEG04EFRtnciAF/W0RAI2', 'Adam Kowalski', 1),
-(14, 'marian@gmail.com', '$2y$10$Hf4ZrJ1DEvBVfkP0X.F5luRdXdYORtOrf56TLdJkANUGvoEnQvrKa', 'Marian Marecki', 1),
-(15, 'wojtek1@wp.pl', '$2y$10$WfM1ijwmJT0qW3sySSopc.Xsk8mN6V8LasQSphbGa5GFSMlVW3fo2', 'Wojtek Kowalski', 0),
-(16, 'anna.nowak@wp.pl', '$2y$10$uU5lnQItGF2qblt/Puc4HuCsmJ7LCXg0Hgege8hAUQ2xEWD4shl7e', 'Anna Nowak', 1),
-(17, 'zenon@gmail.com', '$2y$10$1YMlk5Aj1t32ygqJo6UqB.M8Y.amHB81cozENWBgZRDjiptyQ3zdW', 'Zenon Cegła', 1),
-(18, 'jerzy.slup@wp.pl', '$2y$10$7O7dYFRUf6tCibEWgWL9vOwG0c1kiALiVkXstqu4tcchkTgxTmvqO', 'Jerzy Słup', 1),
-(19, 'halina@o2.pl', '$2y$10$w2LybOaXe7vISf.YdiCsb.iqSwiR2xaWaDE555yTzjFLA/rYM0XYC', 'Halina Kalina', 1),
-(20, 'adam.m@wp.pl', '$2y$10$aaO9R03yAzBFfkL84YBHKeFceWH/Pmal34yBkaEf/Rral1uRbP41u', 'Adam Mickiewicz', 1),
-(21, 'juliusz.s@gmail.com', '$2y$10$n1RyV0umiskdqnmMxf4ARuA9P/rriNj3YPwxPs6n17oncMdR4tUpu', 'Juliusz Słowacki', 1);
+(5, 'roman@wp.pl', '$2y$10$pa3eUL/gMfNFvW/M6z8..OWq1JM97Jn9AWsKdTLtOBjaUq0cxUi5u', 'Roman Flak', 1),
+(7, 'adam.kowalski@wp.pl', '$2y$10$pa3eUL/gMfNFvW/M6z8..OWq1JM97Jn9AWsKdTLtOBjaUq0cxUi5u', 'Adam Kowalski', 1),
+(14, 'marian@gmail.com', '$2y$10$pa3eUL/gMfNFvW/M6z8..OWq1JM97Jn9AWsKdTLtOBjaUq0cxUi5u', 'Marian Marecki', 1),
+(15, 'wojtek1@wp.pl', '$2y$10$pa3eUL/gMfNFvW/M6z8..OWq1JM97Jn9AWsKdTLtOBjaUq0cxUi5u', 'Wojtek Kowalski', 0),
+(16, 'anna.nowak@wp.pl', '$2y$10$pa3eUL/gMfNFvW/M6z8..OWq1JM97Jn9AWsKdTLtOBjaUq0cxUi5u', 'Anna Nowak', 1),
+(17, 'zenon@gmail.com', '$2y$10$pa3eUL/gMfNFvW/M6z8..OWq1JM97Jn9AWsKdTLtOBjaUq0cxUi5u', 'Zenon Cegła', 1),
+(18, 'j.slup@wp.pl', '$2y$10$7O7dYFRUf6tCibEWgWL9vOwG0c1kiALiVkXstqu4tcchkTgxTmvqO', 'Jurek Słup', 1),
+(19, 'halina@o2.pl', '$2y$10$pa3eUL/gMfNFvW/M6z8..OWq1JM97Jn9AWsKdTLtOBjaUq0cxUi5u', 'Halina Kalina', 1),
+(20, 'adam.m@wp.pl', '$2y$10$pa3eUL/gMfNFvW/M6z8..OWq1JM97Jn9AWsKdTLtOBjaUq0cxUi5u', 'Adam Mickiewicz', 1),
+(21, 'juliusz.s@gmail.com', '$2y$10$pa3eUL/gMfNFvW/M6z8..OWq1JM97Jn9AWsKdTLtOBjaUq0cxUi5u', 'Juliusz Słowacki', 1);
 
 --
 -- Ograniczenia dla zrzutów tabel

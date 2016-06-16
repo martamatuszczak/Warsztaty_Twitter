@@ -62,7 +62,8 @@ if (!isset($_SESSION['loggedUserId'])) {
                     if (isset($_GET['id'])) {
                         $receiverId = $_GET['id'];
                     }
-
+                    
+                    //Creating new message
                     if ($_SERVER['REQUEST_METHOD'] === "POST") {
                         if (!empty($_POST['message']) && !empty($_POST['title'])) {
                             $title = $_POST['title'];

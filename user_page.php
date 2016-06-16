@@ -41,7 +41,8 @@ if (!isset($_SESSION['loggedUserId'])) {
                     <?php
                     $loggedUserId = $_SESSION['loggedUserId'];
                     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-                        //Wyświetlanie informacji o użytkowniku
+                        
+                        //Showing user data
                         $userId = $_GET['id'];
                         $userInfo = new User();
                         $userInfo->loadFromDB($conn, $userId);
@@ -52,17 +53,19 @@ if (!isset($_SESSION['loggedUserId'])) {
                                         <div class='col-md-2'><br><br>");
                         
                             if ($userId === $loggedUserId) {
-                                //Linki do edycji użytkownika i do jego usunięcia
+                                
+                                //Links to edit user and to delete user (visible only on logged user page)
                                 echo("<a class='btn btn-info' href='edit_user.php?id=$loggedUserId'>Edit info</a><br><br>");
                                 echo("<a class='btn btn-info' href='delete_user.php?id=$loggedUserId'>Delete account</a>");
                             } else {
-                                //Link do wysłania wiadomości
+                                
+                                //Link to send a message (visible on all user pages but logged user's)
                                 echo("<a class='btn btn-info' href='create_message.php?id=$userId'>Message</a>");
                             }
                             echo("</div></div>");
 
 
-                            //Wszystkie tweety użytkownika
+                            //All user tweets (with comments number)
                             echo("<div class='row'>  
                                         <div class='col-md-12'>
                                             <h3>All tweets</h3>");

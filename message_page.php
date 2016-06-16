@@ -39,25 +39,25 @@ if (!isset($_SESSION['loggedUserId'])) {
             <?php
             $loggedUserId = $_SESSION['loggedUserId'];
             if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-                //Nadawca
+                //Showing sender name
                 if (isset($_GET['author_id'])) {
                     $author = new User();
                     $author->loadFromDB($conn, $_GET['author_id']);
                     echo("<h3>Author: {$author->getFullName()}</h3>");
                 }
-                //Odbiorca
+                //Showing receiver name
                 if (isset($_GET['receiver_id'])) {
                     $receiver = new User();
                     $receiver->loadFromDB($conn, $_GET['receiver_id']);
                     echo("<h3>Receiver: {$receiver->getFullName()}</h3>");
                 }
-                //Treść
+                //Showing message
                 if (isset($_GET['message_id'])) {
                     $messageInfo = new Message();
                     $messageInfo->loadFromDB($conn, $_GET['message_id']);
                     echo("<h4 class='left'>Title: {$messageInfo->getTitle()}</h4><div class='well'><p class='left'>{$messageInfo->getText()}</p></div>");
                 }
-                //Zmiana statusu na przeczytany
+                //Changing status to read
                 if ($_GET['author_id'] !== $loggedUserId) {
                     $sql = "UPDATE Message SET status=1 WHERE id={$_GET['message_id']} ";
                     if ($conn->query($sql) === TRUE) {

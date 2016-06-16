@@ -2,6 +2,7 @@
 <?php
 session_start();
 
+//Logout
 if (isset($_SESSION['loggedUserId'])) {
     unset($_SESSION['loggedUserId']);
 }

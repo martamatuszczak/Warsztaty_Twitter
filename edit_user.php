@@ -82,8 +82,9 @@ $loggedUserId = $_SESSION['loggedUserId'];
                     $oldUser = new User();
                     $oldUser->loadFromDB($conn, $loggedUserId);
                     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
+                                               
                         switch ($_POST['submit']) {
+                            //Changing e-mail
                             case 'new_email_submit':
                                 if (!empty($_POST['new_email'])) {
                                     $oldUser->setEmail($_POST['new_email']);
@@ -91,7 +92,8 @@ $loggedUserId = $_SESSION['loggedUserId'];
                                     echo("Changed e-mail");
                                 }
                                 break;
-
+                                
+                            //Changing full name
                             case 'new_name_submit':
                                 if (!empty($_POST['new_full_name'])) {
                                     $oldUser->setFullName($_POST['new_full_name']);
@@ -99,7 +101,8 @@ $loggedUserId = $_SESSION['loggedUserId'];
                                     echo("Changed full name");
                                 }
                                 break;
-
+                                
+                            //Changing password
                             case 'new_password_submit':
                                 if (!empty($_POST['new_password']) && !empty($_POST['new_password_repeated'])) {
                                     $oldUser->setPassword($_POST['new_password'], $_POST['new_password_repeated']);

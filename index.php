@@ -60,6 +60,7 @@ $userName = $userInfo->getFullName();
                 </div>
             </div>
             <?php
+            //Adding new tweet
             if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 if (!empty($_POST['tweet'])) {
                     $text = $_POST['tweet'];
@@ -72,6 +73,7 @@ $userName = $userInfo->getFullName();
                     echo("Cannot add empty tweet");
                 }
             }
+            //Showing all tweets
             $allTweets = Tweet::loadAllTweets($conn, $_SESSION['loggedUserId']);
 
             echo(
@@ -80,6 +82,7 @@ $userName = $userInfo->getFullName();
                     <div class="well">
                         <div class="list-group">');
             
+            //Showing comments number
             for ($i = 0; $i < count($allTweets); $i++) {
                 $tweetId = $allTweets[$i]->getID();
                 $tweetText = $allTweets[$i]->getText();

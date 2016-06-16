@@ -16,6 +16,7 @@ if(!isset($_SESSION['loggedUserId'])) {
     </head>
     <body>
         <?php
+        //Deleting user
         if($_SERVER['REQUEST_METHOD'] === 'GET') {
             $user = new User();
             $userBeingDeleted = $user->loadFromDB($conn, $_GET['id']);
