@@ -1,36 +1,25 @@
 <?php
+require_once 'User.php';
 
 class Tweet {
-    
-    
-    static function show(mysqli $conn, $id) {
-        $sql = "SELECT * FROM Tweet WHERE id = '$id'";
-        
-        $result = $conn->query($sql);
-        if($result->num_rows == 1) {
-            $row = $result->fetch_assoc();
-            return $row; 
-        }
-        else{
-            return false;
-        }
-    }
-    
-    public static function loadAllComments(mysqli $conn, $tweetId) {
-        $sql = "SELECT Comment.text, Comment.creation_date, User.fullName FROM Comment JOIN User ON Comment.user_id = User.id
-                WHERE tweet_id = $tweetId ORDER BY Comment.creation_date";
+       
+    public static function loadAllTweets(mysqli $conn, $userId) {
+        $sql = "SELECT * FROM Tweet WHERE user_id = $userId";
         $result = $conn->query($sql);
         if($result->num_rows > 0) {
-            $commentsArray = [];
+            $tweetsArray = [];
             while($row = $result->fetch_assoc()) {
-                $commentsArray[]= [$row['fullName'], $row['text'], $row['creation_date']];             
+                $tweet = new Tweet();
+                $tweet->id = $row['id'];
+                $tweet->text = $row['text'];
+                $tweetsArray[]= $tweet;             
             }
             
-            return $commentsArray;
+            return $tweetsArray;
         }
         
     }
-    
+     
     private $id;
     private $userId;
     private $text;
@@ -103,7 +92,4 @@ class Tweet {
         }
     }
     
-    function getAllComments() {
-        
-    }
 }

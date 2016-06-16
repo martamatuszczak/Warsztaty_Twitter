@@ -15,6 +15,47 @@ class Message {
         }
     }
     
+    public static function loadAllMessagesSent(mysqli $conn, $userId) {
+        $sql = "SELECT * FROM Message WHERE author_id = $userId";
+        $result = $conn->query($sql);
+        if($result->num_rows > 0) {
+            $sentMessagesArray = [];
+            while($row = $result->fetch_assoc()) {
+                $messageSent = new Message();
+                $messageSent->id = $row['id'];
+                $messageSent->receiverId = $row['receiver_id'];
+                $messageSent->authorId = $userId;
+                $messageSent->text = $row['text'];
+                $messageSent->title = $row['title'];
+                $sentMessagesArray[] = $messageSent;            
+            }
+            
+            return $sentMessagesArray;
+        }
+        
+    }
+    
+    public static function loadAllMessagesReceived(mysqli $conn, $userId) {
+        $sql = "SELECT * FROM Message WHERE receiver_id = $userId";
+        $result = $conn->query($sql);
+        if($result->num_rows > 0) {
+            $receivedMessagesArray = [];
+            while($row = $result->fetch_assoc()) {
+                $messageReceived = new Message();
+                $messageReceived->id = $row['id'];
+                $messageReceived->receiverId = $userId;
+                $messageReceived->authorId = $row['author_id'];
+                $messageReceived->text = $row['text'];
+                $messageReceived->title = $row['title'];
+                $messageReceived->status = $row['status'];
+                $receivedMessagesArray[] = $messageReceived;                   
+            }
+            
+            return $receivedMessagesArray;
+        }
+        
+    }
+    
     private $id;
     private $authorId;
     private $receiverId;

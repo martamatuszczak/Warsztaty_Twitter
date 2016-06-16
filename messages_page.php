@@ -41,29 +41,48 @@ if (!isset($_SESSION['loggedUserId'])) {
                     <?php
                     echo("<h2>Messages sent</h2>");
                     $userId = $_SESSION['loggedUserId'];
-                    $userMessagesSent = User::loadAllMessagesSent($conn, $userId);
+                    $userMessagesSent = Message::loadAllMessagesSent($conn, $userId);                   
                     echo("<ul class='list-group'>");
                     for ($i = 0; $i < count($userMessagesSent); $i++) {
+                        //Dane wiadomości
+                        $messageId = $userMessagesSent[$i]->getId();
+                        $messageTitle = $userMessagesSent[$i]->getTitle();
+                        //Dane odbiorcy
+                        $receiverId = $userMessagesSent[$i]->getReceiverId();
+                        $receiver = new User();
+                        $receiver->loadFromDB($conn, $receiverId);
+                        $receiverName = $receiver->getFullName();
+                        //Wyświetlanie listy wiadomości wysłanych
                         echo("<li class='list-group-item'>Message to:
-                                <a class='tweet_link' href='user_page.php?id={$userMessagesSent[$i][1]}'>{$userMessagesSent[$i][2]}</a>
-                                <br>Title: <a class='tweet_link' href='message_page.php?message_id={$userMessagesSent[$i][0]}&author_id=$userId&receiver_id={$userMessagesSent[$i][1]}'>{$userMessagesSent[$i][3]}</a></li>");
+                                <a class='tweet_link' href='user_page.php?id=$receiverId'>$receiverName</a>
+                                <br>Title: <a class='tweet_link' href='message_page.php?message_id=$messageId&author_id=$userId&receiver_id=$receiverId'>$messageTitle</a></li>");
                     }
                     echo("</ul></div></div>");
 
                     echo("<div class='row'>
                          <div class='col-md-12'>
                          <h2>Messages received</h2>");
-                    $userMessagesReceived = User::loadAllMessagesReceived($conn, $userId);
+                    $userMessagesReceived = Message::loadAllMessagesReceived($conn, $userId);
                     echo("<ul class='list-group'>");
                     for ($i = 0; $i < count($userMessagesReceived); $i++) {
-                        if ($userMessagesReceived[$i][5] == 0) {
+                        
+                        //Dane wiadomości
+                        $messageId = $userMessagesReceived[$i]->getId();
+                        $messageTitle = $userMessagesReceived[$i]->getTitle();
+                        //Dane odbiorcy
+                        $authorId = $userMessagesReceived[$i]->getAuthorId();
+                        $author = new User();
+                        $author->loadFromDB($conn, $authorId);
+                        $authorName = $author->getFullName();
+                        
+                        if ($userMessagesReceived[$i]->getStatus() == 0) {
                             echo("<li class='list-group-item'>Message from:
-                                    <a class = 'tweet_link' href='user_page.php?id={$userMessagesReceived[$i][1]}'>{$userMessagesReceived[$i][2]}</a>
-                                    <br>Title: <a class = 'tweet_link unread' href='message_page.php?message_id={$userMessagesReceived[$i][0]}&receiver_id=$userId&author_id={$userMessagesReceived[$i][1]}'>{$userMessagesReceived[$i][3]}</a></li>");
+                                    <a class = 'tweet_link' href='user_page.php?id=$authorId'>$authorName</a>
+                                    <br>Title: <a class = 'tweet_link unread' href='message_page.php?message_id=$messageId&receiver_id=$userId&author_id=$authorId'>$messageTitle</a></li>");
                         } else {
                             echo("<li class='list-group-item'>Message from:
-                                    <a class = 'tweet_link' href='user_page.php?id={$userMessagesReceived[$i][1]}'>{$userMessagesReceived[$i][2]}</a>
-                                    <br>Title: <a class = 'read' href='message_page.php?message_id={$userMessagesReceived[$i][0]}&receiver_id=$userId&author_id={$userMessagesReceived[$i][1]}'>{$userMessagesReceived[$i][3]}</a></li>");
+                                    <a class = 'tweet_link' href='user_page.php?id=$authorId'>$authorName</a>
+                                    <br>Title: <a class = 'read' href='message_page.php?message_id=$messageId&receiver_id=$userId&author_id=$authorId'>$messageTitle</a></li>");
                         }
                     }
                     echo("</ul></div></div>");

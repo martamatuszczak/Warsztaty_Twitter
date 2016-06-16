@@ -2,6 +2,26 @@
 
 class Comment {
     
+    public static function loadAllComments(mysqli $conn, $tweetId) {
+        $sql = "SELECT * FROM Comment WHERE tweet_id = $tweetId ORDER BY Comment.creation_date";
+        $result = $conn->query($sql);
+        if($result->num_rows > 0) {
+            $commentsArray = [];
+            while($row = $result->fetch_assoc()) {
+                $comment = new Comment;
+                $comment->id = $row['id'];
+                $comment->tweetId = $row['tweet_id'];
+                $comment->userId = $row['user_id'];
+                $comment->text = $row['text'];
+                $comment->creationDate = $row['creation_date'];               
+                $commentsArray[]= $comment;             
+            }
+            
+            return $commentsArray;
+        }
+        
+    }
+    
     private $id;
     private $tweetId;
     private $userId;

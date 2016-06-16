@@ -3,6 +3,7 @@
 session_start();
 require_once './src/User.php';
 require_once './src/Tweet.php';
+require_once './src/Comment.php';
 require_once './src/connection.php';
 
 if (!isset($_SESSION['loggedUserId'])) {
@@ -42,35 +43,42 @@ if (!isset($_SESSION['loggedUserId'])) {
                     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         //Wyświetlanie informacji o użytkowniku
                         $userId = $_GET['id'];
-                        $userInfo = User::getUserById($conn, $userId);
-                        echo("<h1>{$userInfo['fullName']}</h1>");
-                        echo("<h3>{$userInfo['email']}</h3>
-                                    </div>
-                                    <div class='col-md-2'><br><br>");
+                        $userInfo = new User();
+                        $userInfo->loadFromDB($conn, $userId);
+                        if($userInfo->getActive() == 1){
+                            echo("<h1>{$userInfo->getFullName()}</h1>");
+                            echo("<h3>{$userInfo->getEmail()}</h3>
+                                        </div>
+                                        <div class='col-md-2'><br><br>");
+                        
+                            if ($userId === $loggedUserId) {
+                                //Linki do edycji użytkownika i do jego usunięcia
+                                echo("<a class='btn btn-info' href='edit_user.php?id=$loggedUserId'>Edit info</a><br><br>");
+                                echo("<a class='btn btn-info' href='delete_user.php?id=$loggedUserId'>Delete account</a>");
+                            } else {
+                                //Link do wysłania wiadomości
+                                echo("<a class='btn btn-info' href='create_message.php?id=$userId'>Message</a>");
+                            }
+                            echo("</div></div>");
 
-                        if ($userId === $loggedUserId) {
-                            //Linki do edycji użytkownika i do jego usunięcia
-                            echo("<a class='btn btn-info' href='edit_user.php?id=$loggedUserId'>Edit info</a><br><br>");
-                            echo("<a class='btn btn-info' href='delete_user.php?id=$loggedUserId'>Delete account</a>");
-                        } else {
-                            //Link do wysłania wiadomości
-                            echo("<a class='btn btn-info' href='create_message.php?id=$userId'>Message</a>");
+
+                            //Wszystkie tweety użytkownika
+                            echo("<div class='row'>  
+                                        <div class='col-md-12'>
+                                            <h3>All tweets</h3>");
+                            $userTweets = Tweet::loadAllTweets($conn, $userId);
+                            echo("<div class='list-group'>");
+                            for ($i = 0; $i < count($userTweets); $i++) {
+                                $tweetComments = Comment::loadAllComments($conn, $userTweets[$i]->getID());
+                                $commentsCount = count($tweetComments);
+                                echo("<a class='list-group-item' href='tweet_page.php?id={$userTweets[$i]->getID()}'>{$userTweets[$i]->getText()}<span class='badge'>$commentsCount</span></a>");
+                            }
+                            echo("</div>");
+                        
                         }
-                        echo("</div></div>");
-
-
-                        //Wszystkie tweety użytkownika
-                        echo("<div class='row'>  
-                                    <div class='col-md-12'>
-                                        <h3>All tweets</h3>");
-                        $userTweets = User::loadAllTweets($conn, $userId);
-                        echo("<div class='list-group'>");
-                        for ($i = 0; $i < count($userTweets); $i++) {
-                            $tweetComments = Tweet::loadAllComments($conn, $userTweets[$i][0]);
-                            $commentsCount = count($tweetComments);
-                            echo("<a class='list-group-item' href='tweet_page.php?id={$userTweets[$i][0]}'>{$userTweets[$i][1]}<span class='badge'>$commentsCount</span></a>");
+                        else {
+                            echo("<h1 class='text-center'>Konto użytkownika nie istnieje</h1>");
                         }
-                        echo("</div>");
                     }
                     $conn->close();
                     $conn = null;

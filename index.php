@@ -4,13 +4,15 @@ session_start();
 require_once './src/User.php';
 require_once './src/connection.php';
 require_once './src/Tweet.php';
+require_once './src/Comment.php';
 
 if (!isset($_SESSION['loggedUserId'])) {
     header("Location: login.php");
 }
 
-$userInfo = User::getUserById($conn, $_SESSION['loggedUserId']);
-$userName = $userInfo['fullName'];
+$userInfo = new User();
+$userInfo->loadFromDB($conn, $_SESSION['loggedUserId']);
+$userName = $userInfo->getFullName();
 ?>
 <html>
     <head>
@@ -70,18 +72,20 @@ $userName = $userInfo['fullName'];
                     echo("Cannot add empty tweet");
                 }
             }
-            $allTweets = User::loadAllTweets($conn, $_SESSION['loggedUserId']);
+            $allTweets = Tweet::loadAllTweets($conn, $_SESSION['loggedUserId']);
 
             echo(
             '<div class="row">
                   <div class="col-md-12">
                     <div class="well">
                         <div class="list-group">');
-
+            
             for ($i = 0; $i < count($allTweets); $i++) {
-                $tweetComments = Tweet::loadAllComments($conn, $allTweets[$i][0]);
+                $tweetId = $allTweets[$i]->getID();
+                $tweetText = $allTweets[$i]->getText();
+                $tweetComments = Comment::loadAllComments($conn, $tweetId);
                 $commentsCount = count($tweetComments);
-                echo("<a class='list-group-item' href='tweet_page.php?id={$allTweets[$i][0]}'>{$allTweets[$i][1]}<span class='badge'>$commentsCount</span></a>");
+                echo("<a class='list-group-item' href='tweet_page.php?id=$tweetId'>$tweetText<span class='badge'>$commentsCount</span></a>");
             }
 
             echo(

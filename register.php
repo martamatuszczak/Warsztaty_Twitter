@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <body>
         <div class="container text-center">   
             <div class="jumbotron">
-                <h1>Log in to continue</h1>
+                <h1>Register</h1>
             </div>
             <div class="row">  
                 <div class="col-md-12">

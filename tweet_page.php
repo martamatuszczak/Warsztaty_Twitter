@@ -41,22 +41,39 @@ if (!isset($_SESSION['loggedUserId'])) {
                 $tweetId = $_GET['id'];
                 
                 
-                $thisTweet = Tweet::show($conn, $tweetId);
+                $thisTweet = new Tweet();
+                $thisTweet->loadFromDB($conn, $tweetId);
                 
                 //Wyświetlanie imienia autora
-                $userInfo = User::getUserById($conn, $thisTweet['user_id']);
-                echo("<h3>Author: <a class='tweet_link' href='user_page.php?id={$thisTweet['user_id']}'>{$userInfo['fullName']}</a></h3>");
+                $user = new User();
+                $userId = $thisTweet->getUserID();
+                $user->loadFromDB($conn, $userId);
+                $userName = $user->getFullName();
+                echo("<h3>Author: <a class='tweet_link' href='user_page.php?id=$userId'>$userName</a></h3>");
+                
                 //Wyświetlanie tweeta
                 echo("<h3>Tweet:</h3>");
-                echo("<div>{$thisTweet['text']}</div>");
+                echo("<div>{$thisTweet->getText()}</div>");
                 
                 //Wyświetlanie komentarzy do tweeta
-                $tweetComments = Tweet::loadAllComments($conn, $tweetId);
+                $tweetComments = Comment::loadAllComments($conn, $tweetId);
                 echo("<h4>Comments:</h4>");
                 echo("<dl>");
                 for ($i = 0; $i < count($tweetComments); $i++) {
-                    echo("<dt><a class='tweet_link' href='user_page.php?id={$thisTweet['user_id']}'> {$tweetComments[$i][0]}</a>    {$tweetComments[$i][2]}</dt>");
-                    echo("<dd>{$tweetComments[$i][1]}</dd>");
+                    
+                    //Dane komentarza
+                    $commentText = $tweetComments[$i]->getText();
+                    $commentDate = $tweetComments[$i]->getCreationDate();
+                    
+                    //Dane użytkownika, który wysłał komentarz
+                    $commentingUserId = $tweetComments[$i]->getUserId();
+                    $commentingUser = new User();
+                    $commentingUser->loadFromDB($conn, $commentingUserId);
+                    $commentingUserName = $commentingUser->getFullName();
+                    
+                    //Generowanie elementów listy komentarzy
+                    echo("<dt><a class='tweet_link' href='user_page.php?id=$commentingUserId'>$commentingUserName </a>$commentDate</dt>");
+                    echo("<dd>$commentText</dd>");
                 }
                 echo("</dl>");
             }

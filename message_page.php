@@ -41,18 +41,21 @@ if (!isset($_SESSION['loggedUserId'])) {
             if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 //Nadawca
                 if (isset($_GET['author_id'])) {
-                    $authorInfo = User::getUserById($conn, $_GET['author_id']);
-                    echo("<h3>Author: {$authorInfo['fullName']}</h3>");
+                    $author = new User();
+                    $author->loadFromDB($conn, $_GET['author_id']);
+                    echo("<h3>Author: {$author->getFullName()}</h3>");
                 }
                 //Odbiorca
                 if (isset($_GET['receiver_id'])) {
-                    $receiverInfo = User::getUserById($conn, $_GET['receiver_id']);
-                    echo("<h3>Receiver: {$receiverInfo['fullName']}</h3>");
+                    $receiver = new User();
+                    $receiver->loadFromDB($conn, $_GET['receiver_id']);
+                    echo("<h3>Receiver: {$receiver->getFullName()}</h3>");
                 }
                 //Treść
                 if (isset($_GET['message_id'])) {
-                    $messageInfo = Message::getMessageById($conn, $_GET['message_id']);
-                    echo("<h4 class='left'>Title: {$messageInfo['title']}</h4><div class='well'><p class='left'>{$messageInfo['text']}</p></div>");
+                    $messageInfo = new Message();
+                    $messageInfo->loadFromDB($conn, $_GET['message_id']);
+                    echo("<h4 class='left'>Title: {$messageInfo->getTitle()}</h4><div class='well'><p class='left'>{$messageInfo->getText()}</p></div>");
                 }
                 //Zmiana statusu na przeczytany
                 if ($_GET['author_id'] !== $loggedUserId) {
