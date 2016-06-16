@@ -14,6 +14,27 @@ class User {
         }
     }
     
+    public static function loadAllUsers(mysqli $conn) {
+        $sql = "SELECT * FROM User WHERE active = 1";
+        
+        $result = $conn->query($sql);
+        if($result->num_rows > 0) {
+            $usersArray = [];
+            while($row = $result->fetch_assoc()) {
+                $user = new User();
+                $user->email = $row['email'];
+                $user->password = $row['password'];
+                $user->fullName = $row['fullName'];
+                $user->id = $row['id'];
+                $user->active = $row['active'];
+                $usersArray[] = $user;
+            }
+            return $usersArray;
+        }
+                
+    }
+
+
     public static function login(mysqli $conn, $email, $password) {
         $sql = "SELECT * FROM User WHERE email = '$email'";
         $result = $conn->query($sql);
@@ -43,6 +64,10 @@ class User {
         $this->password = "";
         $this->fullName = "";
         $this->active = 0;
+    }
+    
+    public function getId() {
+        return $this->id;
     }
     
     public function setEmail($email) {

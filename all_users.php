@@ -39,21 +39,20 @@ if (!isset($_SESSION['loggedUserId'])) {
             </div>
 
             <?php
-            $sql = "SELECT * FROM User WHERE active=1";
-            $result = $conn->query($sql);
-            if ($result->num_rows > 0) {
+            $usersArray = User::loadAllUsers($conn);
+            
                 echo(
                 '<div class="row">
                   <div class="col-md-12">
                         <div class="list-group">');
-                while ($row = $result->fetch_assoc()) {
-                    echo("<a class='tweet_link list-group-item' href='user_page.php?id={$row['id']}'>Użytkownik: {$row['fullName']} E-mail: {$row['email']}</a>");
+                foreach($usersArray as $user) {
+                    echo("<a class='tweet_link list-group-item' href='user_page.php?id={$user->getId()}'>Użytkownik: {$user->getFullName()} E-mail: {$user->getEmail()}</a>");
                 }
                 echo(
                 '</div>
                  </div>
                 </div>');
-            }
+
             $conn->close();
             $conn = null;
             ?>
